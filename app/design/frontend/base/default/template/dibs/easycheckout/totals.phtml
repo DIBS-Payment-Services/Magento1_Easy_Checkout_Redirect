@@ -1,0 +1,89 @@
+<?php $shippingMethods = $this->getSippingMethods();
+      //$shippingMethods = $shippingMethods['methods'];?>
+<?php if($shippingMethods): ?>
+    <div id="dibs-easy-shipping-title" class="dibs-easy-ctrl-title"><?php echo $this->__('Shipping Methods'); ?></div>
+    <div id="dibs-easy-shipping-methods">
+        <?php foreach($shippingMethods as $code=>$method): ?>
+        <div class="dibs-easy-shipping-method-wrapper">
+            <?php $class = $method['active'] ? 'dibs-easy-shipping-selector dibs-easy-active': 'dibs-easy-shipping-selector dibs-easy-non-active'; ?>
+            <div id="<?= $code ?>" class="<?= $class ?>" onclick="updateView({action:'set-shipping-method', shipping_rate_code: '<?= $code ?>'})"></div>
+            <div> <span><?= $method['carrier_title'] .' - '. $method['method_title'] ?></span> - <span><?= $method['price'] ?></span></div>
+            <div class="clear"></div>
+        </div>
+        <?php endforeach; ?>
+    </div>
+<?php endif;?>
+
+<div id="dibs-easy-ordersummary-title" class="dibs-easy-ctrl-title"><?php echo $this->__('Order Summary')?></div>
+<table id="totals-table"> 
+    <tbody>
+        
+ <?php $cartTotals = $this->getCartTotals(); ?>       
+
+  <?php foreach($cartTotals as $key=>$value): ?>
+      
+      <?php if($value['id'] != 'grand_total') :?>
+      <tr id="tr-<?= $key ?>" >
+         <td class="dibs-easy-totals-lable" id="dibs-easy-totals-lable-<?= $value['id'] ?>" id="dibs-easy-totals-lable-<?= $value['id'] ?>"><?= $value['label'] ?></td>  
+         <td class="dibs-easy-totals-total" id="dibs-easy-totals-<?= $value['id'] ?>" id="dibs-easy-totals-<?= $value['id'] ?>" align="right"><?= $value['value'] ?></td>
+      </tr>
+     <?php endif;?>
+  <?php endforeach; ?>
+ 
+ 
+    <tr id="coupone_tr">
+       <td style="width: 120px;">
+       <div class="block discount" id="block-discount" data-collapsible="true" role="tablist">
+    <div class="" id="coupone-title" onclick="couponControl(this)">
+        <strong id="block-discount-heading" role="heading" aria-level="2">✚&nbsp;Apply Discount Code</strong>
+    </div>
+    <div id="coupon-form" style="display: none;">
+        <form id="discount-coupon-form" method="post" action="<?= $this->getCouponeUrl()?>">
+            
+            <?php if($this->getCouponeCode()): ?>
+            <input type="hidden" name="remove" value="1">
+            <?php endif; ?>
+            
+            
+            <input type="hidden" name="return_url" value="<?= $this->getCheckoutUrl()?>">
+            <div class="">
+                <input type="hidden" name="remove" id="remove-coupon" value="0">
+                <div class="field" style="float:left;">
+                    <div class="control">
+                        <input type="text" class="input-text" id="coupon_code" name="coupon_code" value="<?= $this->getCouponeCode() ?>" <?php if($this->getCouponeCode()) {echo "disabled";} ?>  placeholder="Enter discount code" value="">
+                    </div>
+                </div>
+                <div class="primary">
+                  <button id="easy-coupon-button-submit" class="action apply primary" type="submit">
+                  <?php if(!$this->getCouponeCode()): ?>
+                    <span data-bind="text: coupone_button_lable"><?php echo $this->__('Apply Discount'); ?></span>
+                  <?php endif; ?>
+                  <?php if($this->getCouponeCode()): ?>
+                    <span data-bind="text: coupone_button_lable"><?php echo $this->__('Cancel'); ?></span>
+                  <?php endif; ?>
+                  </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="clear"> </div>
+    </div>
+    </td>
+ <td></td>
+</tr>
+
+  <?php foreach($cartTotals as $key=>$value): ?>
+   <?php if($value['id'] == 'grand_total') :?>
+      <tr id="tr-<?= $key ?>">
+         <td class="dibs-easy-totals-lable" id="dibs-easy-totals-lable-<?= $value['id'] ?>" id="dibs-easy-totals-lable-<?= $value['id'] ?>"><?= $value['label'] ?></td>  
+         <td class="dibs-easy-totals-total" id="dibs-easy-totals-<?= $value['id'] ?>" id="dibs-easy-totals-<?= $value['id'] ?>" align="right"><?= $value['value'] ?></td>
+      </tr>
+     <?php endif;?>
+  <?php endforeach; ?>
+  </tbody>
+ </table>
+<div id="dibseasy-switch-checkout-screen">
+     <form action="<?php echo Mage::getUrl('checkout'); ?>">
+         <button type="submit" class="btn btn-outline-primary"><?php echo $this->__('Use other payment method');?></button>
+     </form>
+ </div>

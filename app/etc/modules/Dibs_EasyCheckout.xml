@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+  <modules>
+    <Dibs_EasyCheckout>
+      <active>true</active>
+      <codePool>community</codePool>
+    </Dibs_EasyCheckout>
+  </modules>
+</config>

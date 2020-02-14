@@ -1,0 +1,4 @@
+<?php /** @var Dibs_EasyCheckout_Block_Checkout_Link $this */ ?>
+<?php if ($this->isEasyCheckoutAvailable()):?>
+    <button type="button" title="<?php echo Mage::helper('core')->quoteEscape($this->__('Proceed to Easy Checkout')) ?>" class="button btn-proceed-checkout btn-checkout btn-easy-checkout" onclick="window.location='<?php echo $this->getCheckoutUrl() ?>';"><span><span><?php echo $this->__('Proceed to Easy Checkout') ?></span></span></button>
+<?php endif?>

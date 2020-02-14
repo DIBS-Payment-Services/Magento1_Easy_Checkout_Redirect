@@ -1,0 +1,139 @@
+<?= $this->getSessionError() ?>
+<div class="page-title-easy"> <?php echo $this->__('Cart items');?></div>
+<table id="dibseasy-cart-table">
+
+        <tr id="dibs-easy-cart-thead">
+            <td></td>
+            <td>qty</td>
+            <td class="col price"><?php echo $this->__('Price'); ?></td>
+            <td style="padding-left:15px;"><?php echo $this->__('Subtotal');?></td>
+        </tr>
+
+  <?php foreach($this->getCartProducts() as $product):?> 
+   <tr class="dibs-easy-cart-row">
+         <td class="dibs-easy-thumb-td"> 
+            <div class="dibs-easy-product-thumbnail">
+                <span class="product-image-container" style="width:165px;">
+                <span class="product-image-wrapper" style="padding-bottom: 100%;">
+                    <a href="<?= $product['product_url']?>"><img class="product-image-photo" src="<?= $product['thumb_url'] ?>" width="82" height="82"></a></span>
+                </span>
+            </div>
+            <div class="dibs-easy-cart-descr"><?= $product['name'] ?></div>
+         </td>
+         <td class = "dibs-easy-qty-td" > <input id="<?= $product['id'] ?>" class="input-text qty" type="text" value="<?= $product['quantity'] ?>"></td>
+         <td style="padding-left:15px;" class = "dibs-easy-price-td"> <?= $product['price'] ?> </td>
+         <td class = "dibs-easy-subtotal-td"> 
+             <span class="dibs-easy-cart-subtotal"> <?= $product['subtotal'] ?> </span>
+             <span class="dibs-easy-remove-link"> <a class="dibs-easy-remove-link-a" 
+             onclick="return confirm('<?php echo Mage::helper('core')->quoteEscape($this->__('Are you sure you would like to remove this item from the shopping cart?'), true) ?>');"
+             style="color:#007FB0;" href="<?= $this->getUrl('dibseasy/checkout/removeItem/' . 'id/' . $product['id']); ?>"><?php echo $this->__('Remove');?></a></span>
+         </td>
+    </tr>
+ <?php endforeach; ?>
+
+</table>
+
+
+<div id="loader" class="loading" style="display:none;">
+  <div class='uil-ring-css' style='transform:scale(0.79);'>
+    <div></div>
+  </div>
+</div>
+
+<?php /** @var Dibs_EasyCheckout_Block_Checkout $this */ ?>
+<script type="text/javascript" src="<?php echo $this->getDibsCheckoutJsUrl() ?>"></script>
+<div id="dibs-easy-controls"></div>
+<div id="dibs-easy-window">
+    <div id="dibs-complete-checkout"></div>
+    <div id="dibseasy-switch-checkout-mobile"> 
+        <button id="dibseasy-switch-checkout-mobile" type="submit" class="btn btn-outline-primary"><?php echo $this->__('Use other payment method'); ?></button>
+    </div>
+</div>
+    
+</div>
+<script>
+    var customerIsLoggedIn = false;
+ 
+    //<![CDATA[
+    var checkoutOptions = {
+        checkoutKey: '<?= $this->getCheckoutKey() ?>',
+        paymentId : '<?= $this->getPaymentId() ?>',
+        containerId : 'dibs-complete-checkout',
+        language: '<?= $this->getCheckoutLanguage() ?>',
+    };
+    var checkout = new Dibs.Checkout(checkoutOptions);
+
+    checkout.on('payment-completed', function(response) {
+        window.location = '<?php echo $this->getDibsCheckoutValidateUrl() ?>';
+    });
+
+    checkout.on('address-changed', function(response) {
+        customerIsLoggedIn = true;
+        updateView({'action':'address-changed', 'customerisloggedin':customerIsLoggedIn});
+    });
+    //]]>
+    var $_ = jQuery;
+    var previousVal = null;
+    updateView({'action':'start', 'customerisloggedin':customerIsLoggedIn});
+    $_('.dibs-easy-qty-td input').focus(function(){
+        previousVal = $_(this).val();
+    });
+
+    $_('.dibs-easy-qty-td input').focusout(function(){
+        var currentVal = $_(this).val();
+        if(isValidQty(currentVal) && currentVal !== previousVal) {
+            window.location.href = '<?= $this->getUpdateCartUrl() ?>'
+                    + 'id/' + $_(this).attr('id') + '/qty/' + currentVal;
+        } else {
+           revertInvalidValue($_(this));
+        }
+
+    });
+
+    $_('block-discount-heading').click(function(){
+        $_('#discount-form').show();
+    });
+
+    function couponControl(el) {
+      $_('#coupon-form').toggle();
+    }
+    
+    function isValidQty(val) {
+        return (val.length > 0) && (val - 0 == val) && (val - 0 > 0);
+    }
+    
+    function revertInvalidValue(el) {
+        if (!isValidQty($_(el).val()) || $_(el).val() == previousVal) {
+            $_(el).val(previousVal);
+        }
+    }
+
+    function updateView (params) {
+       ct = this;
+       $_('#loader').show();
+       $_.post("<?= $this->getUpdateViewUrl()?>", params ,function() {
+       }).done(function(result) {
+            if(result.exception == 1) {
+                window.location.href = "<?= $this->getUrl('checkout/cart') ?>";
+            }
+            $_('#loader').hide();
+            $_('#dibs-easy-controls').html(result.outputHtml);
+            ct.checkout.thawCheckout();
+       });
+    }
+
+    var loadingOverlay = document.querySelector('.loading');
+function toggleLoading(event){
+  if (event.keyCode !== 13) return;
+  
+  document.activeElement.blur();
+  
+  if (loadingOverlay.classList.contains('hidden')){
+    loadingOverlay.classList.remove('hidden');
+  } else {
+    loadingOverlay.classList.add('hidden');
+  }
+}
+
+document.addEventListener('keydown', toggleLoading);
+</script>

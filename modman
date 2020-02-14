@@ -1,0 +1,9 @@
+app/code/community/*  app/code/community/
+app/design/adminhtml/default/default/template/dibs/*  app/design/adminhtml/default/default/template/dibs/
+app/design/frontend/base/default/layout/dibs_easycheckout.xml  app/design/frontend/base/default/layout/dibs_easycheckout.xml
+app/design/frontend/base/default/template/dibs/*  app/design/frontend/base/default/template/dibs/
+app/etc/modules/Dibs_EasyCheckout.xml  app/etc/modules/Dibs_EasyCheckout.xml
+app/locale/en_US/Dibs_EasyCheckout.csv  app/locale/en_US/Dibs_EasyCheckout.csv
+lib/Dibs/*  lib/Dibs/
+skin/frontend/base/default/css/dibs/*  skin/frontend/base/default/css/dibs/
+skin/frontend/base/default/images/dibs/*  skin/frontend/base/default/images/dibs/
