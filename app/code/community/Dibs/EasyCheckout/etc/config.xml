@@ -154,8 +154,8 @@
             <dibs_easy_checkout>
                 <title>Nets Easy Checkout</title>
                 <model>dibs_easycheckout/payment_checkout</model>
-                <active>0</active>
                 <sort_order>999</sort_order>
+                <enabled>1</enabled>
                 <terms_and_conditions_link_type>direct</terms_and_conditions_link_type>
                 <live_secret_key backend_model="adminhtml/system_config_backend_encrypted" />
                 <test_secret_key backend_model="adminhtml/system_config_backend_encrypted" />
