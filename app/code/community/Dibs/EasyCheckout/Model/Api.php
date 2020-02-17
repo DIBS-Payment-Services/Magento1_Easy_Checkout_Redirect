@@ -188,7 +188,7 @@ class Dibs_EasyCheckout_Model_Api extends Mage_Core_Model_Abstract
                $phoneNumber = $this->extractPhone();
                $params['checkout']['consumer'] =
                    ['email' => $this->getCustomer()->getEmail(),
-                       'shippingAddress' => $helper->stringFilter($this->getCustomerShippingAddress()),
+                       'shippingAddress' => $this->getCustomerShippingAddress(),
                        /*'phoneNumber' => [
                            'prefix' => $phoneNumber['prefix'],
                            'number' => $phoneNumber['phone']],*/
@@ -205,8 +205,20 @@ class Dibs_EasyCheckout_Model_Api extends Mage_Core_Model_Abstract
       $this->setInvoiceFee($params, $quote);
       $this->setTermsAndConditionsUrl($params);
       $this->setCustomerTypes($params);
+
+
+      $totalCalculated = 0;
+      foreach ($params['order']['items'] as $item) {
+          $totalCalculated += $item['grossTotalAmount'];
+      }
+
+      // workaround for error in order amount calculated
+      if($totalCalculated != $params['order']['amount']) {
+        $params['order']['items'] = $this->_getOneOrderLineItem($params['order']['amount']);
+      }
+
       Mage::unregister('easy_request_params');
-      Mage::register('easy_request_params',  json_encode($params));
+      Mage::register('easy_request_params',  print_r($params, true));
       return $params;
     }
 
@@ -363,6 +375,28 @@ class Dibs_EasyCheckout_Model_Api extends Mage_Core_Model_Abstract
             'grossTotalAmount'  =>  $this->_getItemGrossTotalAmount($item),
             'netTotalAmount'    =>  $this->_getItemNetTotalAmount($item) ,
         ];
+
+        return $result;
+    }
+
+    /**
+     * @param Mage_Core_Model_Abstract $item
+     *
+     * @return array
+     */
+    protected function _getOneOrderLineItem($price)
+    {
+        $result = [[
+            'reference'         =>  'product1',
+            'name'              =>  'Product1',
+            'quantity'          =>  1,
+            'unit'              =>  1,
+            'unitPrice'         =>  $price,
+            'taxRate'           =>  0,
+            'taxAmount'         =>  0,
+            'grossTotalAmount'  =>  $price,
+            'netTotalAmount'    =>  $price,
+        ]];
 
         return $result;
     }
