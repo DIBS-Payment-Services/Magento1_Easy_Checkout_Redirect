@@ -202,10 +202,11 @@ class Dibs_EasyCheckout_Model_Api extends Mage_Core_Model_Abstract
       $params['checkout']['merchantHandlesConsumerData'] = true;
       $params['checkout']['integrationType'] = 'hostedPaymentPage';
       $params['checkout']['ReturnUrl'] =  Mage::getUrl('dibseasy/checkout/return', array('_secure'=>true));
-
       $this->setInvoiceFee($params, $quote);
       $this->setTermsAndConditionsUrl($params);
       $this->setCustomerTypes($params);
+      Mage::unregister('easy_request_params');
+      Mage::register('easy_request_params',  json_encode($params));
       return $params;
     }
 

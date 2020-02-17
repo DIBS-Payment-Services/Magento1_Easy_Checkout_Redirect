@@ -221,10 +221,7 @@ class Dibs_EasyCheckout_CheckoutController extends Mage_Core_Controller_Front_Ac
         }
 
     }
-
     public function testAction() {
-       Mage::log('text here', null, 'nets.easy.log', true);
+
     }
-
-
 }
