@@ -10,15 +10,6 @@
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
                     <fields>
-                        <enabled translate="label">
-                            <label>Enable Nets Easy Checkout</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <sort_order>10</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </enabled>
                         <active translate="label">
                             <label>Activate Nets Easy Checkout</label>
                             <frontend_type>select</frontend_type>
@@ -36,7 +27,6 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                            <depends><enabled>1</enabled></depends>
                         </environment>
                         <live_secret_key translate="label">
                             <label>Live Secret Key</label>
@@ -45,7 +35,6 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>0</show_in_store>
-                            <depends><enabled>1</enabled></depends>
                             <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
                         </live_secret_key>
                         <test_secret_key translate="label">
@@ -55,7 +44,6 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>0</show_in_store>
-                            <depends><enabled>1</enabled></depends>
                             <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
                         </test_secret_key>
                         <terms_and_conditions_link translate="label">
@@ -66,10 +54,6 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>0</show_in_store>
-                            <depends>
-                                <enabled>1</enabled>
-                                <terms_and_conditions_link_type>direct</terms_and_conditions_link_type>
-                            </depends>
                             <comment><![CDATA[ The URL to your terms and conditions]]></comment>
                         </terms_and_conditions_link>
                         <new_order_status translate="label">
@@ -80,7 +64,6 @@
                             <show_in_default>1</show_in_default>
                             <show_in_store>1</show_in_store>
                             <show_in_website>1</show_in_website>
-                            <depends><enabled>1</enabled></depends>
                         </new_order_status>
                    </fields>
                 </dibs_easy_checkout>
