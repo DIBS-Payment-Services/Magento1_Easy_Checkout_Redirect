@@ -483,6 +483,21 @@ class Dibs_EasyCheckout_Model_Checkout extends Mage_Core_Model_Abstract
         $payment->authorize(true, $order->getBaseTotalDue());
         $payment->setAmountAuthorized($order->getTotalDue());
         $order->save();
+
+        /** @var Dibs_EasyCheckout_Model_Api $api */
+        $api = Mage::getModel('dibs_easycheckout/api');
+
+        $paymentId = $quote->getDibsEasyPaymentId();
+        $result = $api->findPayment($paymentId);
+        $checkoutUrl = $result->getCheckout()->url;
+        $params = [
+            'reference' => $order->getIncrementId(),
+            'checkoutUrl' =>  $checkoutUrl
+
+        ];
+        // update orederid in Easy administration
+        $api->updateReference($paymentId, $params);
+
         $order->sendNewOrderEmail();
         $quote->setIsActive(false)
             ->save();

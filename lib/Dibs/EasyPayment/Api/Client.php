@@ -70,7 +70,6 @@ class Dibs_EasyPayment_Api_Client {
     public function request($url, $method, $data = [])
     {
         $ch = curl_init();
-
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
@@ -90,7 +89,9 @@ class Dibs_EasyPayment_Api_Client {
     protected function prepareResponse($ch)
     {
         $result = curl_exec($ch);
+
         $code = curl_getinfo($ch, CURLINFO_HTTP_CODE );
+
         $response = new Dibs_EasyPayment_Api_Response($code, $result);
         if ($result === false) {
             $response->setResponse(json_encode(['message'=> curl_error($ch)]));

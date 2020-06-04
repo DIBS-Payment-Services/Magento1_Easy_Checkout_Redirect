@@ -83,13 +83,26 @@ class Dibs_EasyCheckout_Model_Api extends Mage_Core_Model_Abstract
         $result = $response->getResponseDataObject()->getData('refundId');
         return $result;
     }
-    
+
+    /**
+     * @param Mage_Sales_Model_Quote $quote
+     * @param $paymentId
+     */
     public function updateCart(Mage_Sales_Model_Quote $quote, $paymentId)
     {
         $result = null;
         $paymentService = $this->getPaymentService();
         $params = $this->_getUpadtePaymentParams($quote);
         $response = $paymentService->update($paymentId, $params);
+    }
+
+    /**
+     * @param $paymentid
+     * @param $params
+     */
+    public function updateReference($paymentid, $params) {
+       $paymentsService = $this->getPaymentService();
+       $paymentsService->updateReference($paymentid, $params);
     }
 
     /**
